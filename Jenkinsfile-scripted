@@ -1,0 +1,28 @@
+node{
+    def mavenHome = tool name: "maven" , type : "maven"
+    def buildnumber = Build_Number
+stage('git clone'){
+    git branch: 'dev', credentialsId: 'GIT-Credentials', url: 'https://github.com/RahmanAbdul146/maven-web-application.git'
+}
+
+stage('build code'){
+    sh "${mavenHome}/bin/mvn clean package"
+}
+
+stage('build image in ecr'){
+     
+    sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 015901552966.dkr.ecr.ap-south-1.amazonaws.com"
+    sh "docker build -t 015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${buildnumber} ."
+    
+}
+
+stage('push image to ecr'){
+    sh "docker push 015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${buildnumber}"
+}
+
+stage('deploy into k8s'){
+    sh "kubectl apply -f mavenwebapp.yaml"
+    sh "kubectl set image pod/mavenpod mavenappcontainer=015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${buildnumber}"
+}
+
+}
