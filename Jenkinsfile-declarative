@@ -1,0 +1,42 @@
+def build_Number = BUILD_NUMBER
+pipeline{
+    agent any;
+tools{
+    maven 'maven'
+}
+options{
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))
+}
+
+  stages{
+      stage('get code'){
+          steps{
+             git branch: 'dev', credentialsId: 'GIT-Credentials', url: 'https://github.com/RahmanAbdul146/maven-web-application.git' 
+          }
+      }
+     stage('build code'){
+         steps{
+             sh "mvn clean package"
+         }
+     }
+     stage('build image'){
+         steps{
+             //sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 015901552966.dkr.ecr.ap-south-1.amazonaws.com"
+             sh "docker build -t 015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number} ."
+         }
+     }  
+  stage('push image'){
+      steps{
+          sh "docker push 015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number}"
+      }
+  }
+   stage('deploy'){
+       steps{
+           sh "kubectl apply -f mavenwebapp.yaml"
+           sh "kubectl set image pod/mavenpod mavenappcontainer=015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number}"
+       }
+   }   
+      
+      
+  }
+}
