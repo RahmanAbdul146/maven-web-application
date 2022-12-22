@@ -63,7 +63,7 @@ spec:
     
 ---
 apiVersion: autoscaling/v2
-kind: HorizontalAutoPodscaler
+kind: HorizontalPodscaler
 metadata:
   name: mavenapphpa
 spec:
@@ -78,13 +78,13 @@ spec:
     resource:
       name: cpu 
       target:
-      type: Utilization
-      averageUtilization: 60
+        type: Utilization
+        averageUtilization: 60
   - type: Resource
     resource:
       name: memory
       target:
-      type: Utilization
-      averageUtilization: 80
+        type: Utilization
+        averageUtilization: 80
       
     
