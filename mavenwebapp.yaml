@@ -38,11 +38,7 @@ spec:
             port: 8080
           initialDelaySeconds: 10
           periodSeconds: 40
-          httpGet:
-            path: /maven-web-application
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 30
+          
 
 
 
