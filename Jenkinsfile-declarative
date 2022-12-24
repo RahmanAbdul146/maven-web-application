@@ -33,7 +33,7 @@ options{
    stage('deploy'){
        steps{
            sh "kubectl apply -f mavenwebapp.yaml"
-           sh "kubectl set image pod/mavenpod mavenappcontainer=015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number}"
+           sh "kubectl set image deployment/mavendeployment mavenappcontainer=015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number}"
        }
    }   
       
