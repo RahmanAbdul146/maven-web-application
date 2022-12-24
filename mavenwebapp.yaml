@@ -54,7 +54,7 @@ kind: Service
 metadata: 
   name: mavensvc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: mavenapp
   ports:
