@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mavenappcontainer
-        image: 015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number}
+        image: 624570335512.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:${build_Number}
         ports:
         - containerPort: 8080
         resources:
@@ -50,7 +50,7 @@ kind: Service
 metadata: 
   name: mavensvc
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: mavenapp
   ports:
