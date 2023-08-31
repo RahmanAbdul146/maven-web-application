@@ -4,9 +4,9 @@ pipeline{
 tools{
     maven 'maven'
 }
-options{
-    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))
-}
+//options{
+    //buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))
+//}
 
   stages{
       stage('get code'){
@@ -21,19 +21,19 @@ options{
      }
      stage('build image'){
          steps{
-             sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 015901552966.dkr.ecr.ap-south-1.amazonaws.com"
-             sh "docker build -t 015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number} ."
+             sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 624570335512.dkr.ecr.ap-south-1.amazonaws.com"
+             sh "docker build -t 624570335512.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:${build_Number} ."
          }
      }  
   stage('push image'){
       steps{
-          sh "docker push 015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number}"
+          sh "docker push 624570335512.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:${build_Number}"
       }
   }
    stage('deploy'){
        steps{
            sh "kubectl apply -f mavenwebapp.yaml"
-           sh "kubectl set image deployment/mavendeployment mavenappcontainer=015901552966.dkr.ecr.ap-south-1.amazonaws.com/maven-web-app:${build_Number}"
+           sh "kubectl set image deployment/mavendeployment mavenappcontainer=624570335512.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:${build_Number}"
        }
    }   
       
